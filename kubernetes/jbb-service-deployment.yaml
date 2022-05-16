@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice
+spec:
+  selector:
+    matchLabels:
+      app: microservice
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: microservice
+    spec:
+      containers:
+      - name: microservice
+        image: microservice:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+          name: rest-api-port
+
+---
+
+apiVersion: v1
+kind: Service
+apiVersion: v1
+metadata:
+  name: microservice
+spec:
+  selector:
+    app: microservice
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: rest-api-port
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msworker
+spec:
+  selector:
+    matchLabels:
+      app: msworker
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: msworker
+    spec:
+      containers:
+      - name: msworker
+        image: msworker:1.0
+        imagePullPolicy: Never
+
+---
+
+apiVersion: v1
+kind: Service
+apiVersion: v1
+metadata:
+  name: msworker
+spec:
+  selector:
+    app: jbb-system
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 5000
