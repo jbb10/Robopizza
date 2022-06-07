@@ -1,0 +1,21 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app: worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      service: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+        service: worker
+    spec:
+      containers:
+        - name: worker
+          image: worker:v1
+          imagePullPolicy: IfNotPresent
