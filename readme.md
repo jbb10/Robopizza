@@ -1,5 +1,19 @@
 # Microservices from the Ground up
 In this course we’re zooming out and looking at what’s needed to go from zero to a fully functioning microservice-oriented architecture! We’re using Docker to containerize some microservices that are then deployed in Kubernetes. The microservices communicate using APIs (REST) and messaging (RabbitMQ) with the whole thing provisioned in Azure using Terraform, so we’re touching upon a lot of cool tech!
+- This readme serves as the main tutorial and includes all the information needed to go implement the project
+- In the root of the project there's a Powerpoint slide deck that has a high-level walkthrough and an overview of the contents of the project including diagrams
+- A walkthrough of the course was recorded for the DK Engineering Engineering community which mostly follows the steps in this readme available [here](https://myresources.deloitte.com/personal/jbjornsson_deloitte_dk/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjbjornsson%5Fdeloitte%5Fdk%2FDocuments%2FRecordings%2FDK%20Engineering%20Community%20%2D%20SE%20Edition%2D20220623%5F162235%2DMeeting%20Recording%2Emp4&parent=%2Fpersonal%2Fjbjornsson%5Fdeloitte%5Fdk%2FDocuments%2FRecordings)
+
+## Prerequisites
+- Get a Deloitte Azure subscription. We’ll be using Azure to host our cluster and as Deloitte employees we can get an Azure subscription with 350 DKK credits per month to play with! To get the subscription, send an email to Henrik Randløv and ask for a Deloitte Azure subscription. 
+- Get local administrator access on your computer. Instructions can be found under "Local admin rights on your laptop” in the wiki on our Teams channel
+- Install an IDE. We’re not doing heavy C# coding this time so a general purpose text editor is fine (e.g. Sublime, Notepad++ or VS Code)
+- Install Docker Desktop. Used to build our docker images (the mircoservices)
+- Install the .NET SDK. Used to build our micrservices
+- Install Git. Used to pull the code from the repo
+- Install kubectl. Used to control Kubernetes
+- Install the Azure CLI. We use this to interact with Azure
+- Install Helm. This tool allows us to install Helm Charts which are packages of Kubernetes components
 
 ## Prerequisites
 - Get a Deloitte Azure subscription. The quickest option is to simply start a free trial with Azure. Another option is to get a Deloitte-provided subscription (talk to the Tech Engineering Leadership Team). 
