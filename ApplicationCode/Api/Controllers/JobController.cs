@@ -22,7 +22,7 @@ namespace Api.Controllers
         {
             _logger.LogInformation($"Got a request for making a {pizzaType} pizza");
 
-            //We need an ID for the job so we generate a UNIX timestamp to use as ID
+            //We need an ID for the job so we generate a UNIX timestamp to use as ID, e.g. 1655984608
             var jobId = DateTimeOffset.Now.ToUnixTimeSeconds();
 
             //Push message on queue to create job

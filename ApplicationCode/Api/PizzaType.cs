@@ -5,6 +5,7 @@
         Salsiccia,
         Roma,
         Bresaola,
-        Salmone
+        Salmone,
+        Mozzarella
     }
 }

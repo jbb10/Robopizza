@@ -19,7 +19,7 @@ provider "azurerm" {
 #Below this line are our resources
 
 resource "azurerm_resource_group" "main" {
-  name     = "Microservices-course-rg"
+  name     = "Robopizza-rg"
   location = "North Europe"
   tags = {
     "purpose" = "dev learning"
@@ -27,38 +27,32 @@ resource "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_virtual_network" "mainvnet" {
-  name                = "Microservices-course-vnet"
+  name                = "Robopizza-vnet"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   address_space       = ["10.0.0.0/8"]
-
-  subnet {
-    name           = "default"
-    address_prefix = "10.240.0.0/16"
-  }
-
-  subnet {
-    name           = "virtual-node-aci"
-    address_prefix = "10.241.0.0/16"
-  }
 }
 
-resource "azurerm_container_registry" "microservices_course_cluster_acr" {
-  name                = "MicroservicesCourseRegistry"
+resource "azurerm_subnet" "default_subnet" {
+  name                 = "default-subnet"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.mainvnet.name
+  address_prefixes     = ["10.240.0.0/16"]
+}
+
+resource "azurerm_container_registry" "robopizza_cluster_acr" {
+  name                = "robopizzaregistry"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   sku                 = "Basic"
   admin_enabled       = true
 }
 
-resource "azurerm_kubernetes_cluster" "microservices_course_cluster" {
-  name                                = "Microservices-course-cluster"
+resource "azurerm_kubernetes_cluster" "robopizza_cluster" {
+  name                                = "Robopizza-cluster"
   resource_group_name                 = azurerm_resource_group.main.name
   location                            = azurerm_resource_group.main.location
   dns_prefix                          = "mscourse-dns"
-  private_cluster_enabled             = true
-  private_cluster_public_fqdn_enabled = false
-  http_application_routing_enabled    = true
 
   identity {
     type = "SystemAssigned"
@@ -70,7 +64,7 @@ resource "azurerm_kubernetes_cluster" "microservices_course_cluster" {
     max_count           = 5
     min_count           = 1
     vm_size             = "Standard_B4ms"
-    //vnet_subnet_id      = "/subscriptions/3aebf555-ff6c-414d-90a7-4cf0e51fa15d/resourceGroups/JbbTestSystem/providers/Microsoft.Network/virtualNetworks/JbbTestSystem-vnet/subnets/default"
+    vnet_subnet_id      = azurerm_subnet.default_subnet.id
     zones = [
       1, 2, 3
     ]
@@ -83,3 +77,9 @@ resource "azurerm_kubernetes_cluster" "microservices_course_cluster" {
     "purpose" = "dev learning"
   }
 }
+
+# resource "azurerm_role_assignment" "cluster_to_acr" {
+#   scope                = azurerm_container_registry.robopizza_cluster_acr.id
+#   role_definition_name = "AcrPull"
+#   principal_id         = azurerm_kubernetes_cluster.robopizza_cluster.kubelet_identity[0].object_id
+# }

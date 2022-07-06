@@ -5,7 +5,7 @@ metadata:
   labels:
     app: worker
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       service: worker
@@ -17,5 +17,5 @@ spec:
     spec:
       containers:
         - name: worker
-          image: worker:v1
-          imagePullPolicy: IfNotPresent
+          image: robopizzaregistry.azurecr.io/worker:v1
+          imagePullPolicy: Always
