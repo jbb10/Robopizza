@@ -2,9 +2,9 @@
 In this course we’re zooming out and looking at what’s needed to go from zero to a fully functioning microservice-oriented architecture! We’re using Docker to containerize some microservices that are then deployed in Kubernetes. The microservices communicate using APIs (REST) and messaging (RabbitMQ) with the whole thing provisioned in Azure using Terraform, so we’re touching upon a lot of cool tech!
 
 ## Prerequisites
-- Get a Deloitte Azure subscription. We’ll be using Azure to host our cluster and as Deloitte employees we can get an Azure subscription with 350 DKK credits per month to play with! To get the subscription, send an email to Henrik Randløv and ask for a Deloitte Azure subscription. 
-- Get local administrator access on your computer. Instructions can be found under "Local admin rights on your laptop” in the wiki on our Teams channel
-- Install an IDE. We’re not doing heavy C# coding this time so a general purpose text editor is fine (e.g. Sublime, Notepad++ or VS Code)
+- Get a Deloitte Azure subscription. The quickest option is to simply start a free trial with Azure. Another option is to get a Deloitte-provided subscription (talk to the Tech Engineering Leadership Team). 
+- Get local administrator access on your computer. Instructions can be found under ["Local admin rights on your laptop"](https://teams.microsoft.com/l/entity/com.microsoft.teamspace.tab.wiki/tab::7e5b95cb-bdb9-4245-8aa5-f80650e2f33c?context=%7B%22subEntityId%22%3A%22%7B%5C%22pageId%5C%22%3A2%2C%5C%22sectionId%5C%22%3A17%2C%5C%22origin%5C%22%3A2%7D%22%2C%22channelId%22%3A%2219%3A4b0ca2536333440d94a6a254e4fbb83f%40thread.skype%22%7D&tenantId=36da45f1-dd2c-4d1f-af13-5abe46b99921) in the wiki on our "Custom Development" Teams channel
+- Install an IDE. We’re not doing heavy C# coding this time so a general purpose text editor is fine (e.g. VS Code, Sublime, Notepad++), but IDEs work too (Visual Studio, Rider, IntelliJ, etc.)
 - Install Docker Desktop. Used to build our docker images (the mircoservices)
 - Install the .NET SDK. Used to build our micrservices
 - Install Git. Used to pull the code from the repo
