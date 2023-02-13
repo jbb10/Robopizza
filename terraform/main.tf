@@ -18,16 +18,22 @@ provider "azurerm" {
 #
 #Below this line are our resources
 
+variable "project_name" {
+  type        = string
+  default     = "defaultname"
+  description = "The name of our project. Used in most resource names"
+}
+
 resource "azurerm_resource_group" "main" {
-  name     = "Robopizza-rg"
-  location = "North Europe"
+  name     = "${var.project_name}-rg"
+  location = "West Europe"
   tags = {
     "purpose" = "dev learning"
   }
 }
 
 resource "azurerm_virtual_network" "mainvnet" {
-  name                = "Robopizza-vnet"
+  name                = "${var.project_name}-vnet"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   address_space       = ["10.0.0.0/8"]
@@ -40,8 +46,43 @@ resource "azurerm_subnet" "default_subnet" {
   address_prefixes     = ["10.240.0.0/16"]
 }
 
+#Network Security Group for our subnet
+resource "azurerm_network_security_group" "robopizza_nsg" {
+  name                = "${var.project_name}-nsg"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  security_rule {
+    name                       = "AllowHTTPInbound"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "AllowHTTPSInbound"
+    priority                   = 101
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    "purpose" = "dev learning"
+  }
+}
+
 resource "azurerm_container_registry" "robopizza_cluster_acr" {
-  name                = "robopizzaregistry"
+  name                = "${var.project_name}registry"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   sku                 = "Basic"
@@ -49,10 +90,10 @@ resource "azurerm_container_registry" "robopizza_cluster_acr" {
 }
 
 resource "azurerm_kubernetes_cluster" "robopizza_cluster" {
-  name                                = "Robopizza-cluster"
-  resource_group_name                 = azurerm_resource_group.main.name
-  location                            = azurerm_resource_group.main.location
-  dns_prefix                          = "mscourse-dns"
+  name                = "${var.project_name}-cluster"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  dns_prefix          = "mscourse-dns"
 
   identity {
     type = "SystemAssigned"

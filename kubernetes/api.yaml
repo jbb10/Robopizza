@@ -34,6 +34,7 @@ metadata:
     app: api
     service: api
 spec:
+  type: LoadBalancer
   ports:
     - port: 8080
       targetPort: 80

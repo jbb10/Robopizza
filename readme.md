@@ -34,7 +34,7 @@ The project contains a folder called **ApplicationCode** which contains our micr
 - As a bonus, try instantiating another worker container from our worker image by issuing `docker run -d --name Worker2 worker:v1`. If we put some more orders in, we should see the queue empty much faster now!
 
 ## Container Orchestration and Kubernetes
-Managing containers manually on the command line is fine during development but is not practical in production. We want our containers to automatically spin up if there's a failure or high load and we'd like the computer to take care of making sure the system is in the state we desire. This is where Kubernetes - a container orchestrator - comes in.
+Managing containers manually on the command line is fine during development but is not practical in production. We want our containers to automatically spin up if there's a failure or high load and we'd like the computer to take care of making sure the system is in the state we desire. This is where Kubernetes — a container orchestrator — comes in.
 - Let's start off by cleaning up our Docker Desktop-managed images by opening the Containers tab and deleteing Api, Worker and RabbitMQ (click the dots on the right > remove)
 - Docker Desktop supports setting up a Kubernetes cluster on our computer without needing a cloud provider. Open Docker Desktop settings (click the cogwheel at the top) > Kubernetes > Enable Kubernetes. It takes a few minutes for it to start running but once it is, we should see a green kubernetes logo in the bottom left corner of Docker Desktop, next to the Docker logo
     - If you have problems getting this to work, try clicking the bug in the top right and click "Clean / Purge data".
@@ -51,12 +51,15 @@ Managing containers manually on the command line is fine during development but 
 - Try putting in 40 orders in a short amount of time. This is going to take forever... is there anything in the worker.yaml that we can modify to make this go faster?
 
 ## Cloud providers and Terraform
-Terraform is a tool for provisioning and managing infrastructure with cloud providers. Similar to yaml for Kubernetes, it provides a *declarative* way to provision infrastructure by simply telling the cloud provider what the infrastructure should look like, and allowing them to figure out how to make that happen. Let's provision a Kubernetes cluster in Azure and deploy our Kubernetes resources there!
+Running a single-node Kubernetes cluster on our own computer can be good for development but it isn't what real-world Kubernetes setups look like. We generally want to run a cluster across multiple nodes (computers) and have it automatically scale up and down. Terraform is a tool for provisioning and managing infrastructure with cloud providers. Similar to yaml for Kubernetes, it provides a *declarative* way to provision infrastructure by simply telling the cloud provider what the infrastructure should look like, and allowing them to figure out how to make that happen. Let's provision a Kubernetes cluster in Azure and deploy our Kubernetes resources there!
 - Navigate to the terraform folder and issue `terraform init`. This Prepares the folder containing the terraform code for talking with the cloud provider.
 - This folder contains a single `main.tf` file with Terraform code.
 - Before terraform can start provisioning infrastructure on your behalf, it needs to log in (much like you need to log in to the cloud provider's portal before provisioning infrastrucutre by hand). With Azure, the azure command line provides a handy tool for this, simply issue `az login` and follow the instructions.
 - When login has completed issue `terraform plan`. Terraform will scan the folder and find all the terraform code contained in the folder (module) and compare it to the infrastructure already in place in the cloud (which is nothing at this point). In our case there's only one .tf file but having many (with any name/names) would work exactly the same. The output of `terraform plan` will show you what actions terraform will need to take to make whatever's in your terraform files happen. These actions can be *create*, *change*, *destroy* or *no change*, and the output will detail what resources get which action.
 - To apply your changes issue `terraform apply`. The command will show you again what it plans to do to apply your infrastructure code and you'll have to type "yes" for the provisioning to begin. Once it begins it can take a while depending on the nature of the resources you provision.
+
+## Kubernetes in the Cloud
+
 
 ## Cleanup
 - When we're done playing around with our Microservices it's time to clean up! by issuing the `terraform destroy` command from our terraform folder, we destroy all the infrastructure that was provisioned earlier. This includes the Kubernetes cluster and everything in it and is a simple way to clean up your Azure account.
