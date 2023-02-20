@@ -2,18 +2,16 @@
 kind: Deployment
 metadata:
   name: worker
-  labels:
-    app: worker
+  namespace: robopizza
 spec:
   replicas: 3
   selector:
     matchLabels:
-      service: worker
+      app: worker
   template:
     metadata:
       labels:
         app: worker
-        service: worker
     spec:
       containers:
         - name: worker

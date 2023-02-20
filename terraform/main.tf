@@ -104,7 +104,7 @@ resource "azurerm_kubernetes_cluster" "robopizza_cluster" {
     enable_auto_scaling = true
     max_count           = 5
     min_count           = 1
-    vm_size             = "Standard_B4ms"
+    vm_size             = "Standard_B1ls"
     vnet_subnet_id      = azurerm_subnet.default_subnet.id
     zones = [
       1, 2, 3
