@@ -28,7 +28,7 @@ resource "azurerm_resource_group" "main" {
   name     = "${var.project_name}-rg"
   location = "West Europe"
   tags = {
-    "purpose" = "dev learning"
+    "purpose" = "Holds all resources associated with ${var.project_name}"
   }
 }
 
@@ -77,16 +77,27 @@ resource "azurerm_network_security_group" "robopizza_nsg" {
   }
 
   tags = {
-    "purpose" = "dev learning"
+    "purpose" = "NSG for the ${var.project_name} subnet. This is mandated by Deloitte"
   }
 }
 
+#We associate the NSG to the Subnet
+resource "azurerm_subnet_network_security_group_association" "nsg_to_subnet" {
+  subnet_id                 = azurerm_subnet.default_subnet.id
+  network_security_group_id = azurerm_network_security_group.robopizza_nsg.id
+}
+
+#We need a container registry to hold our containers
 resource "azurerm_container_registry" "robopizza_cluster_acr" {
   name                = "${var.project_name}registry"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   sku                 = "Basic"
   admin_enabled       = true
+
+  tags = {
+    "purpose" = "${var.project_name} Container registry"
+  }
 }
 
 resource "azurerm_kubernetes_cluster" "robopizza_cluster" {
@@ -104,21 +115,22 @@ resource "azurerm_kubernetes_cluster" "robopizza_cluster" {
     enable_auto_scaling = true
     max_count           = 5
     min_count           = 1
-    vm_size             = "Standard_B1ls"
+    vm_size             = "Standard_B2s"
     vnet_subnet_id      = azurerm_subnet.default_subnet.id
     zones = [
       1, 2, 3
     ]
     tags = {
-      "purpose" = "dev learning"
+      "purpose" = "${var.project_name} Kubernetes cluster node"
     }
   }
 
   tags = {
-    "purpose" = "dev learning"
+    "purpose" = "${var.project_name} Kubernetes cluster"
   }
 }
 
+#Assign the cluster the rights to pull images from our container registry
 resource "azurerm_role_assignment" "cluster_to_acr" {
   scope                = azurerm_container_registry.robopizza_cluster_acr.id
   role_definition_name = "AcrPull"

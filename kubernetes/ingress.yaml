@@ -3,22 +3,24 @@ kind: Ingress
 metadata:
   name: robopizza-ingress
   namespace: robopizza
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-      - path: /rabbitmq
+      - path: /rabbitmq(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: rabbitmq
             port:
               number: 15672
-      - path: /api
+      - path: /api(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: api-service
             port:
-              number: 8080
+              number: 80
