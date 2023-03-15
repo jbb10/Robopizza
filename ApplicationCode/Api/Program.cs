@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,20 +8,20 @@ builder.Services.
     AddJsonOptions(options =>
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseForwardedHeaders();
-
-app.UseSwagger();
+app.UseSwagger(opt =>
+    {
+       opt.PreSerializeFilters.Add((swagger, httpReq) =>
+       {
+            var serverUrl = $"http://{httpReq.Host}/api";
+            swagger.Servers = new List<OpenApiServer>{new() { Url = serverUrl }};
+       });
+    });
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("swagger/v1/swagger.json", "Robopizza");

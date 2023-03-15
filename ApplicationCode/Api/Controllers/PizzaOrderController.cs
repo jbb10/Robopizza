@@ -6,12 +6,12 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class JobController : ControllerBase
+    public class PizzaOrderController : ControllerBase
     {
-        private readonly ILogger<JobController> _logger;
+        private readonly ILogger<PizzaOrderController> _logger;
         private readonly IConfiguration _config;
 
-        public JobController(ILogger<JobController> logger, IConfiguration config)
+        public PizzaOrderController(ILogger<PizzaOrderController> logger, IConfiguration config)
         {
             _logger = logger;
             _config = config;

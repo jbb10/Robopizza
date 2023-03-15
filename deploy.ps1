@@ -3,6 +3,10 @@
 docker build -f ApplicationCode\Api\Dockerfile ApplicationCode -t api:v1
 docker build -f ApplicationCode\Worker\Dockerfile ApplicationCode -t worker:v1
 
+#docker run -d -p 55001:80 --name api api:v1
+#docker run -d --name worker worker:v1
+#docker run -d --hostname my-rabbit -p 15672:15672 --name RabbitMQ rabbitmq:3-management
+
 # Create the infrastructure
 az login
 terraform -chdir=terraform init
