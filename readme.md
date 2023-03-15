@@ -1,12 +1,10 @@
 # Microservices from the Ground up
 In this course we’re zooming out and looking at what’s needed to go from zero to a fully functioning microservice-oriented architecture! We’re using Docker to containerize some microservices that are then deployed in Kubernetes. The microservices communicate using APIs (REST) and messaging (RabbitMQ) with the whole thing provisioned in Azure using Terraform, so we’re touching upon a lot of cool tech!
 - This readme serves as the main tutorial and includes all the information needed to go implement the project
-- In the root of the project there's a Powerpoint slide deck that has a high-level walkthrough and an overview of the contents of the project including diagrams
-- A walkthrough of the course was recorded for the DK Engineering Engineering community which mostly follows the steps in this readme available [here](https://myresources.deloitte.com/personal/jbjornsson_deloitte_dk/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjbjornsson%5Fdeloitte%5Fdk%2FDocuments%2FRecordings%2FDK%20Engineering%20Community%20%2D%20SE%20Edition%2D20220623%5F162235%2DMeeting%20Recording%2Emp4&parent=%2Fpersonal%2Fjbjornsson%5Fdeloitte%5Fdk%2FDocuments%2FRecordings)
 
 ## Prerequisites
-- Get An Azure subscription. The quickest option is to simply start a free trial with Azure. Another option is to get a Deloitte-provided subscription (talk to the Tech Engineering Leadership Team). 
-- Get local administrator access on your computer. Instructions can be found under ["Local admin rights on your laptop"](https://teams.microsoft.com/l/entity/com.microsoft.teamspace.tab.wiki/tab::7e5b95cb-bdb9-4245-8aa5-f80650e2f33c?context=%7B%22subEntityId%22%3A%22%7B%5C%22pageId%5C%22%3A2%2C%5C%22sectionId%5C%22%3A17%2C%5C%22origin%5C%22%3A2%7D%22%2C%22channelId%22%3A%2219%3A4b0ca2536333440d94a6a254e4fbb83f%40thread.skype%22%7D&tenantId=36da45f1-dd2c-4d1f-af13-5abe46b99921) in the wiki on our "Custom Development" Teams channel
+- Get An Azure subscription. The quickest option is to simply start a free trial with Azure.
+- If you're in a corporate environment, get local administrator access on your computer.
 - Install an IDE. We’re not doing heavy C# coding this time so a general purpose text editor is fine (e.g. VS Code, Sublime, Notepad++), but IDEs work too (Visual Studio, Rider, IntelliJ, etc.)
 - Install Docker Desktop. Used to build our docker images (the mircoservices)
 - Install the .NET SDK. Used to build our micrservices
@@ -18,7 +16,7 @@ In this course we’re zooming out and looking at what’s needed to go from zer
 ## Microservices and Docker
 The project contains a folder called **ApplicationCode** which contains our microservices. We have a service called "Api" that exposes a REST API towards our end-users that allows them to put in orders for pizzas. Api takes these orders and puts them on our job queue. The second type of microservice we have is called Worker. These grab orders from the queue and actually make the pizzas.
 
-- Start by opening the **Api project** and taking a look at the code. The API is extremely simple - it has one POST operation for creating our jobs. This operation creates a connection to our RabbitMQ server, and creates a channel in that connection. That channel is used to create a queue (if it doesn't exist) and then publish our messages. See any issues with the performance of this setup?
+- Start by opening the **Api project** and taking a look at the code. The API is extremely simple - it has one POST operation for creating our jobs. This operation creates a connection to our RabbitMQ server, and creates a channel in that connection. That channel is used to create a queue (if it doesn't exist) and then publish our messages.
 - Now let's look at the **Worker project**. It's even simpler, using IHostedService to implement our background service behaviour. When the Worker starts it starts listening to a queue (via a channel and connection) and defines a callback function that runs when a message is received. In order to simulate our pizza making, we simply sleep the thread for 15-25 seconds.
 - Try running the API project and see what happens when you try to create a job..
     - To build a docker image navigate to the solution folder (ApplicationCode) and issue the following command: `docker build -f .\Api\Dockerfile . -t api:v1` where the `-f` parameter specifies the path to the Dockerfile, the `.` is the context from where we execute the commands in the Dockerfile, and `-t` tags the image

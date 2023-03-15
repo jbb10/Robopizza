@@ -9,23 +9,25 @@ builder.Services.
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => {
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Robopizza"});
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger(opt =>
     {
-       opt.PreSerializeFilters.Add((swagger, httpReq) =>
-       {
+        opt.PreSerializeFilters.Add((swagger, httpReq) =>
+        {
             var serverUrl = $"http://{httpReq.Host}/api";
-            swagger.Servers = new List<OpenApiServer>{new() { Url = serverUrl }};
-       });
+            swagger.Servers = new List<OpenApiServer> { new() { Url = serverUrl } };
+        });
     });
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("swagger/v1/swagger.json", "Robopizza");
-    c.RoutePrefix = string.Empty;
+    c.RoutePrefix = "";
 });
 
 app.UseAuthorization();
