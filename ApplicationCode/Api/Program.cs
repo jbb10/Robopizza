@@ -20,7 +20,7 @@ app.UseSwagger(opt =>
     {
         opt.PreSerializeFilters.Add((swagger, httpReq) =>
         {
-            var serverUrl = $"http://{httpReq.Host}/api";
+            var serverUrl = $"http://{httpReq.Host}/";
             swagger.Servers = new List<OpenApiServer> { new() { Url = serverUrl } };
         });
     });
