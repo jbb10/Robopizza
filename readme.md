@@ -1,6 +1,7 @@
 # Microservices from the Ground up
 In this course we’re zooming out and looking at what’s needed to go from zero to a fully functioning microservice-oriented architecture! We’re using Docker to containerize some microservices that are then deployed in Kubernetes. The microservices communicate using APIs (REST) and messaging (RabbitMQ) with the whole thing provisioned in Azure using Terraform, so we’re touching upon a lot of cool tech!
 - This readme serves as the main tutorial and includes all the information needed to go implement the project
+- The deloy.ps1 file contains useful commands for deploying the various components of the system
 
 ## Prerequisites
 - Get An Azure subscription. The quickest option is to simply start a free trial with Azure.
@@ -55,9 +56,6 @@ Running a single-node Kubernetes cluster on our own computer can be good for dev
 - Before terraform can start provisioning infrastructure on your behalf, it needs to log in (much like you need to log in to the cloud provider's portal before provisioning infrastrucutre by hand). With Azure, the azure command line provides a handy tool for this, simply issue `az login` and follow the instructions.
 - When login has completed issue `terraform plan`. Terraform will scan the folder and find all the terraform code contained in the folder (module) and compare it to the infrastructure already in place in the cloud (which is nothing at this point). In our case there's only one .tf file but having many (with any name/names) would work exactly the same. The output of `terraform plan` will show you what actions terraform will need to take to make whatever's in your terraform files happen. These actions can be *create*, *change*, *destroy* or *no change*, and the output will detail what resources get which action.
 - To apply your changes issue `terraform apply`. The command will show you again what it plans to do to apply your infrastructure code and you'll have to type "yes" for the provisioning to begin. Once it begins it can take a while depending on the nature of the resources you provision.
-
-## Kubernetes in the Cloud
-
 
 ## Cleanup
 - When we're done playing around with our Microservices it's time to clean up! by issuing the `terraform destroy` command from our terraform folder, we destroy all the infrastructure that was provisioned earlier. This includes the Kubernetes cluster and everything in it and is a simple way to clean up your Azure account.
